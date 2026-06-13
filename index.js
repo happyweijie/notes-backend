@@ -21,18 +21,19 @@ app.use(requestLogger)
 app.get('/api/notes', (request, response) => {
   Note.find({}).then((notes) => {
     response.json(notes)
-  });
+  })
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
-  Note.findById(request.params.id).then(note => {
-    if (note) {
-      response.json(note)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/notes', (request, response, next) => {
@@ -64,12 +65,12 @@ app.delete('/api/notes/:id', (request, response, next) => {
 
 app.put('/api/notes/:id', (request, response, next) => {
   const { content, important } = request.body
-  
+
   Note.findById(request.params.id)
     .then(note => {
       if (!note) {
         response.status(401).end()
-      } 
+      }
 
       note.content = content
       note.important = important

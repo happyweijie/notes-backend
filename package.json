@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
+    "lint": "eslint ."
   },
   "dependencies": {
     "express": "^5.2.1",
@@ -17,6 +18,10 @@
     "mongoose": "^9.6.3"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.7.4"
+    "@eslint/js": "^10.0.1",
+    "@flydotio/dockerfile": "^0.7.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0"
   }
 }
