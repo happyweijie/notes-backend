@@ -1,13 +1,7 @@
+/**
+ * Only defines the note schema
+ */
 const mongoose = require('mongoose')
-
-const url = process.env.MONGO_URI
-mongoose.connect(url, { family: 4 })
-  .then(() => {
-    console.log('Connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('Error connecting to MongoDB:', error.message)
-  })
 
 const noteSchema = new mongoose.Schema({
   content: {
