@@ -1,10 +1,33 @@
 const assert = require('node:assert')
-const { test, after } = require('node:test')
+const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const Note = require('../models/note')
 
 const api = supertest(app)
+
+const initialNotes = [
+  {
+    content: 'HTML is easy',
+    important: false,
+  },
+  {
+    content: 'Browser can execute only JavaScript',
+    important: true,
+  },
+]
+
+beforeEach(async () => {
+  // delete all notes matching a condition, in tthis case all notes
+  await Note.deleteMany({})
+
+  let noteObj = new Note(initialNotes[0])
+  await noteObj.save()
+
+  noteObj = new Note(initialNotes[1])
+  await noteObj.save()
+})
 
 test('notes returned as json', async () => {
   await api
@@ -16,7 +39,7 @@ test('notes returned as json', async () => {
 test('all notes are returned', async () => {
   const response = await api.get('/api/notes')
 
-  assert.strictEqual(response.body.length, 2)
+  assert.strictEqual(response.body.length, initialNotes.length)
 })
 
 test('a specific note is within the returned notes', async () => {
