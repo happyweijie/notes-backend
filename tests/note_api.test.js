@@ -77,14 +77,31 @@ test('note without content is not added', async () => {
 
 //=========================== Fetch a single note ===============
 test('a specific note can be viewed', async () => {
-  const noteAtStart = await helper.notesInDb()
-  const noteToView = noteAtStart[0]
+  const notesAtStart = await helper.notesInDb()
+  const noteToView = notesAtStart[0]
 
   const resNote =  await api.get(`/api/notes/${noteToView.id}`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
   assert.deepStrictEqual(resNote.body, noteToView)
+})
+
+//=============== Deleting a Note ===================
+test('a note can be deleted', async () => {
+  const notesAtStart = await helper.notesInDb()
+  const noteToDelete = notesAtStart[0]
+
+  await api.delete(`/api/notes/${noteToDelete.id}`)
+    .expect(204)
+
+  const notesAtEnd = await helper.notesInDb()
+
+  // Ensure note deleted
+  assert.strictEqual(notesAtEnd.length, notesAtStart.length - 1)
+
+  const ids = notesAtEnd.map(n => n.id)
+  assert(!ids.includes(noteToDelete.id))
 })
 
 after(async () => {
