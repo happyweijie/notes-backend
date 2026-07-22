@@ -19,6 +19,8 @@ beforeEach(async () => {
   await noteObj.save()
 })
 
+
+// ===================== View all notes =================
 test('notes returned as json', async () => {
   await api
     .get('/api/notes')
@@ -40,6 +42,7 @@ test('a specific note is within the returned notes', async () => {
   assert(contents.includes('HTML is easy'))
 })
 
+//=========================  Add New Note ==================
 test('a valid note can be added', async () => {
   const newNote = {
     content: 'async/await simplifies making async calls',
@@ -59,7 +62,7 @@ test('a valid note can be added', async () => {
   assert(contents.includes(newNote.content))
 })
 
-test.only('note without content is not added', async () => {
+test('note without content is not added', async () => {
   const newNote = {
     important: true
   }
@@ -70,6 +73,18 @@ test.only('note without content is not added', async () => {
 
   const notesAtEnd = await helper.notesInDb()
   assert.strictEqual(notesAtEnd.length, helper.initialNotes.length)
+})
+
+//=========================== Fetch a single note ===============
+test('a specific note can be viewed', async () => {
+  const noteAtStart = await helper.notesInDb()
+  const noteToView = noteAtStart[0]
+
+  const resNote =  await api.get(`/api/notes/${noteToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  assert.deepStrictEqual(resNote.body, noteToView)
 })
 
 after(async () => {
