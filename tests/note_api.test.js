@@ -104,6 +104,24 @@ test('a note can be deleted', async () => {
   assert(!ids.includes(noteToDelete.id))
 })
 
+//======== Update a note =============
+test('a note can be updated', async () => {
+  const notesAtStart = await helper.notesInDb()
+  const noteToUpdate = notesAtStart[0]
+  const updatedNote = {
+    content: 'updated text',
+    important: true
+  }
+
+  const resNote = await api.put(`/api/notes/${noteToUpdate.id}`)
+    .send(updatedNote)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(resNote.body.content, updatedNote.content)
+  assert.strictEqual(resNote.body.important, updatedNote.important)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

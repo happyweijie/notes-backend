@@ -52,22 +52,22 @@ notesRouter.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-notesRouter.put('/:id', (request, response, next) => {
+notesRouter.put('/:id', async (request, response) => {
   const { content, important } = request.body
 
-  Note.findById(request.params.id)
-    .then(note => {
-      if (!note) {
-        response.status(401).end()
-      }
+  const note = await Note.findById(request.params.id)
+  if (!note) {
+    response.status(401).end()
+  }
 
-      note.content = content
-      note.important = important
+  // update note fields
+  note.content = content
+  if (important) {
+    note.important = important
+  }
 
-      return note.save()
-        .then((updatedNote) => response.json(updatedNote))
-    })
-    .catch(error => next(error))
+  const updatedNote = await note.save()
+  response.json(updatedNote)
 })
 
 
