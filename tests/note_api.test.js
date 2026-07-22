@@ -9,19 +9,32 @@ const Note = require('../models/note')
 const api = supertest(app)
 
 beforeEach(async () => {
-  // delete all notes matching a condition, in tthis case all notes
+  await Note.deleteMany({})
+  await Note.insertMany(helper.initialNotes)
+
+  /*
   await Note.deleteMany({})
 
-  let noteObj = new Note(helper.initialNotes[0])
-  await noteObj.save()
+  const noteObjects = helper.initialNotes
+    .map(note => new Note(note))
 
-  noteObj = new Note(helper.initialNotes[1])
-  await noteObj.save()
+  // using promise.all
+  const promiseArray = noteObjects.map(note => note.save())
+  await Promise.all(promiseArray)
+
+  // using for of block
+  for (let note of helper.initialNotes) {
+    let noteObject = new Note(note)
+    await noteObject.save()
+  }
+  */
 })
 
 
 // ===================== View all notes =================
 test('notes returned as json', async () => {
+  console.log('entered test')
+
   await api
     .get('/api/notes')
     .expect(200)
