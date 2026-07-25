@@ -57,7 +57,7 @@ notesRouter.put('/:id', async (request, response) => {
 
   const note = await Note.findById(request.params.id)
   if (!note) {
-    response.status(401).end()
+    response.status(404).end()
   }
 
   // update note fields
