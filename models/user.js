@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
   name: String,
   passwordHash: String,
   // store ids of notes created by that user
@@ -18,7 +22,7 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
 
     delete returnedObject._id
-    delete returnedObject._v
+    delete returnedObject.__v
     delete returnedObject.passwordHash
   }
 })
