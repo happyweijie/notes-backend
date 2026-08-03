@@ -20,7 +20,11 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.get('/', async (request, response) => {
+  // fetch all users and populate their notes
+  // note: the populate method works because we defined
+  // a ref in the user schema to notes
   const users = await User.find({})
+    .populate('notes', { content: 1, important: 1 })
 
   response.json(users)
 })
