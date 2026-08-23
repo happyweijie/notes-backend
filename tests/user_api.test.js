@@ -28,7 +28,7 @@ describe('when there is initially one user in db', () => {
       password: 'strongpassword'
     }
 
-    api.post('/api/users')
+    await api.post('/api/users')
       .send(newUser)
       .expect(201)
       .expect('Content-Type', /application\/json/)
